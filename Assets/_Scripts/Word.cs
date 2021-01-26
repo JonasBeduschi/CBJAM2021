@@ -19,6 +19,7 @@ public class Word : MonoBehaviour
 
     private void Awake()
     {
+        Create();
         stones = GetComponentsInChildren<Stones>();
         source = GetComponent<AudioSource>();
     }
@@ -61,15 +62,12 @@ public class Word : MonoBehaviour
     public void Create()
     {
         Alphabet alphabet = GameObject.FindObjectOfType<Alphabet>();
-        for (int i = transform.GetChild(0).childCount - 1; i >= 0; i--) {
-            DestroyImmediate(transform.GetChild(0).GetChild(i).gameObject);
-        }
+        Erase();
 
         myWord = gameObject.name;
 
-        for (int i = 0; i < myWord.Length; i++) {
+        for (int i = 0; i < myWord.Length; i++)
             Instantiate(alphabet.GetObjectFor(myWord[i]), transform.GetChild(0));
-        }
 
         BoxCollider box = GetComponent<BoxCollider>();
         Vector3 size = box.size;
@@ -86,5 +84,12 @@ public class Word : MonoBehaviour
         for (int i = 0; i < transform.GetChild(0).childCount; i++) {
             transform.GetChild(0).GetChild(i).localPosition = new Vector3(startAt + distanceBetweenCharacters * i, 0, 0);
         }
+    }
+
+    [ContextMenu("Erase")]
+    public void Erase()
+    {
+        for (int i = transform.GetChild(0).childCount - 1; i >= 0; i--)
+            DestroyImmediate(transform.GetChild(0).GetChild(i).gameObject);
     }
 }
